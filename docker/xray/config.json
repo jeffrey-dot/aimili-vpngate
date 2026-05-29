@@ -1,0 +1,63 @@
+{
+  "log": {
+    "loglevel": "warning"
+  },
+  "inbounds": [
+    {
+      "tag": "cf-vless-ws",
+      "listen": "0.0.0.0",
+      "port": 10000,
+      "protocol": "vless",
+      "settings": {
+        "clients": [
+          {
+            "id": "7f91df45-7b86-42c4-9f6d-c38e4f4b38cf",
+            "email": "cf-user"
+          }
+        ],
+        "decryption": "none"
+      },
+      "streamSettings": {
+        "network": "ws",
+        "security": "none",
+        "wsSettings": {
+          "path": "/ray"
+        }
+      }
+    }
+  ],
+  "outbounds": [
+    {
+      "tag": "vpngate-out",
+      "protocol": "socks",
+      "settings": {
+        "servers": [
+          {
+            "address": "aimilivpn",
+            "port": 7928
+          }
+        ]
+      }
+    },
+    {
+      "tag": "direct",
+      "protocol": "freedom"
+    },
+    {
+      "tag": "block",
+      "protocol": "blackhole"
+    }
+  ],
+  "routing": {
+    "domainStrategy": "AsIs",
+    "rules": [
+      {
+        "type": "field",
+        "inboundTag": [
+          "cf-vless-ws"
+        ],
+        "outboundTag": "vpngate-out"
+      }
+    ]
+  }
+}

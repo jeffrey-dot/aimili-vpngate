@@ -1,0 +1,40 @@
+services:
+  aimilivpn:
+    build:
+      context: .
+    restart: unless-stopped
+    cap_add:
+      - NET_ADMIN
+    devices:
+      - /dev/net/tun:/dev/net/tun
+    environment:
+      VPNGATE_DATA_DIR: /data
+      LOCAL_PROXY_HOST: 0.0.0.0
+      LOCAL_PROXY_PORT: "7928"
+      UI_HOST: 0.0.0.0
+      UI_PORT: "8787"
+    volumes:
+      - aimilivpn-data:/data
+    expose:
+      - "7928"
+      - "8787"
+    healthcheck:
+      test: ["CMD", "python3", "-c", "import socket; s=socket.create_connection(('127.0.0.1', 7928), 2); s.close()"]
+      interval: 30s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+  xray:
+    image: ghcr.io/xtls/xray-core:latest
+    restart: unless-stopped
+    depends_on:
+      - aimilivpn
+    volumes:
+      - ./docker/xray/config.json:/etc/xray/config.json:ro
+    expose:
+      - "10000"
+    command: ["run", "-config", "/etc/xray/config.json"]
+
+volumes:
+  aimilivpn-data:

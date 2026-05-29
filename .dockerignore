@@ -1,0 +1,8 @@
+.git
+.agents
+.codex
+vpngate_data
+__pycache__
+*.pyc
+*.pyo
+*.log

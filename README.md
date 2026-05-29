@@ -41,6 +41,10 @@ bash <(curl -Ls https://raw.githubusercontent.com/baoweise-bot/aimili-vpngate/ma
 * **`ml password`**：生成新的 12 位安全管理密码。
 * **`ml uninstall`**：完全卸载服务并清理相关环境。
 
+### 🐳 Docker 部署
+
+如果需要将 AimiliVPN 与 Xray 一起部署到 VPS，可参考 [Docker deployment](docker/README.md)。示例 compose 不映射宿主机端口，适合交给 Dokploy 接管入口路由；Xray 入站走 Cloudflare WebSocket，出站转发到 AimiliVPN 的 Docker 内网 SOCKS5 代理。
+
 #### 💡 首次安装与常见报错解决（小白必看）
 
 ##### 1. 极简系统缺少依赖（Ubuntu 18-26 / Debian 首次安装）
